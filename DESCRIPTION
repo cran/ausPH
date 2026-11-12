@@ -1,0 +1,30 @@
+Package: ausPH
+Title: Retrieve Data from the Parliamentary Handbook of the
+        Commonwealth of Australia
+Version: 1.0.1
+Authors@R: 
+    person("Pat", "Leslie", , "patrick.leslie@anu.edu.au", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-9218-8981"))
+Description: Retrieves data from the Australian Parliamentary Library's
+    Parliamentary Handbook <https://handbook.aph.gov.au/> and returns it as
+    tidy tables: members and senators, their parliamentary and party service,
+    ministries, shadow ministries, committees, parties, electorates,
+    parliaments, sitting dates, elections and two candidate preferred results.
+    Known errors in the Handbook are flagged, and can optionally be corrected
+    from a documented errata table.
+License: MIT + file LICENSE
+URL: https://github.com/palesl/ausPH
+BugReports: https://github.com/palesl/ausPH/issues
+Encoding: UTF-8
+Language: en-AU
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Depends: R (>= 4.1.0)
+Imports: rjson, dplyr, readr
+Config/roxygen2/version: 8.0.0
+NeedsCompilation: no
+Packaged: 2026-10-27 23:25:48 UTC; u1040068
+Author: Pat Leslie [aut, cre] (ORCID: <https://orcid.org/0000-0002-9218-8981>)
+Maintainer: Pat Leslie <patrick.leslie@anu.edu.au>
+Repository: CRAN
+Date/Publication: 2026-11-12 18:50:02 UTC
