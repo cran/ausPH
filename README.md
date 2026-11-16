@@ -5,6 +5,10 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/ausPH)](https://CRAN.R-project.org/package=ausPH)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24095468.svg)](https://doi.org/10.5281/zenodo.24095468)
+
 <!-- badges: end -->
 
 The goal of ausPH is to retrieve data from the [Parliamentary Handbook
@@ -12,7 +16,8 @@ of the Commonwealth of Australia](https://handbook.aph.gov.au/) and
 return ready-to-analyse data, formatted as a `tibble`. The package
 relies on the data from the Handbook site, which is subject to change
 and improvement. Functions that query the Handbook’s API return `NULL`,
-with a message, if the API cannot be reached.
+with a message, if the API cannot be reached. The API itself is
+documented at <https://handbookapi.aph.gov.au/swagger/ui/index>.
 
 At present, the package contains the following functions:
 
@@ -25,6 +30,8 @@ At present, the package contains the following functions:
 - `getParlService` (data on parliamentary tenures of MPs and senators
   since 1901)
 - `getParliaments` (Data on Parliamentary terms since 1901)
+- `getPresidingOfficers` (Data on Speakers, Presidents, Chairs of
+  Committees and their deputies since 1901)
 - `getMinisters` (Data on Ministers since 1901)
 - `getShadowMinisters` (Data on Shadow Ministers since 1901)
 - `getParties` (Data on Parties since 1901)
@@ -58,10 +65,11 @@ overlap the member’s previous term, or sittings recorded for a chamber
 that did not sit.
 
 The flag column is returned by `getParlService()`, `getPartyService()`,
-`getSittingDates()` and `getElections()`. Where the correct value is
-known, it is listed with its evidence in `getErrata()`, and passing
-`apply_errata = TRUE` to these functions uses the corrected value
-instead (no corrections are listed yet for `getPartyService()`):
+`getPresidingOfficers()`, `getSittingDates()` and `getElections()`.
+Where the correct value is known, it is listed with its evidence in
+`getErrata()`, and passing `apply_errata = TRUE` to these functions uses
+the corrected value instead (no corrections are listed yet for
+`getPartyService()` or `getPresidingOfficers()`):
 
 ``` r
 getParlService(chamber = "house", apply_errata = TRUE)
@@ -79,6 +87,7 @@ when you call the function:
 | Function | By default | Requests |
 |----|----|----|
 | `getParlService()` | retrieves the whole table from the Handbook | 1 |
+| `getPresidingOfficers()` | retrieves the whole table from the Handbook | 2 |
 | `getElections()` | adds elections listed since the stored copy | 2 |
 | `get2CP()` | adds results for elections since the stored copy | about 3, plus 1 per new election |
 | `getSittingDates()` | adds sitting dates after the stored copy | 1 per year |
@@ -92,8 +101,16 @@ attribute, e.g. `attr(getElections("all"), "updated")`.
 
 ## Installation
 
-You can install the development version of ausPH from
-[GitHub](https://github.com/palesl/ausPH) with:
+Install the released version of ausPH from
+[CRAN](https://CRAN.R-project.org/package=ausPH) with:
+
+``` r
+install.packages("ausPH")
+```
+
+Or install the development version from
+[GitHub](https://github.com/palesl/ausPH), which may have features not
+yet on CRAN (see `NEWS.md`):
 
 ``` r
 # install.packages("remotes")
@@ -102,21 +119,12 @@ remotes::install_github("palesl/ausPH")
 
 ## Citation
 
-Please cite this package as the following:
-
-> Leslie, Pat. 2026. “ausPH: An R Package to Retrieve Data from the
-> Parliamentary Handbook of the Commonwealth of Australia.” R package
-> version 1.0.1. <https://github.com/palesl/ausPH>.
-
-Bibtex format entry:
-
-    @misc{leslie_ausph_2026,
-        title = {{ausPH}: {An} {R} package to retrieve data from the {Parliamentary} {Handbook} of the {Commonwealth} of {Australia}.},
-        url = {https://github.com/palesl/ausPH},
-        author = {Leslie, Pat},
-        year = {2026},
-        note = {R package version 1.0.1},
-    }
+Each release is archived on Zenodo with its own DOI. To cite the version
+you used, run `citation("ausPH")`, or find the version’s DOI on
+[Zenodo](https://doi.org/10.5281/zenodo.24095468); that link always
+resolves to the latest version. Because the Handbook changes over time,
+use `update = FALSE` with the stored data for results that can be
+reproduced with the same version.
 
 ## Examples
 
@@ -189,7 +197,7 @@ get2CP()
 ## known errors in the Handbook
 
 getErrata()
-#> # A tibble: 14 × 9
+#> # A tibble: 13 × 9
 #>    table        key   field handbook_value corrected_value issue evidence source
 #>    <chr>        <chr> <chr> <chr>          <chr>           <chr> <chr>    <chr> 
 #>  1 parl_service BV8|… Date… 1946-06-28     1946-09-28      over… Term st… https…
@@ -197,19 +205,18 @@ getErrata()
 #>  3 parl_service L08|… Date… 1940-08-21     1940-09-21      over… Term st… https…
 #>  4 parl_service JXQ|… Date… 1977-11-10     1977-12-10      over… Term st… https…
 #>  5 parl_service KDT|… Date… 1972-11-02     1972-12-02      over… Term st… https…
-#>  6 sitting_dat… 1928… Sena… TRUE           FALSE           cham… Only th… https…
-#>  7 sitting_dat… 1997… Sena… TRUE           FALSE           cham… Canberr… https…
-#>  8 sitting_dat… 2008… Reps… TRUE           FALSE           cham… The 42n… https…
-#>  9 elections    378   Date… 1902-03-06     1902-03-26      date… The Han… https…
-#> 10 elections    343   Date… 1910-08-29     1910-08-24      date… The Han… https…
-#> 11 elections    341   Date… 1940-11-10     1940-11-16      date… The Han… https…
-#> 12 elections    9004  Date… 1945-10-18     1945-08-18      date… The Han… https…
-#> 13 elections    315   Date… 1963-06-01     1963-09-28      date… The Han… https…
-#> 14 elections    327   Date… 1963-09-28     1963-06-01      date… The Han… https…
+#>  6 sitting_dat… 1996… Reps… TRUE           FALSE           cont… Not a s… https…
+#>  7 sitting_dat… 2008… Reps… TRUE           FALSE           cham… The 42n… https…
+#>  8 elections    378   Date… 1902-03-06     1902-03-26      date… The Han… https…
+#>  9 elections    343   Date… 1910-08-29     1910-08-24      date… The Han… https…
+#> 10 elections    341   Date… 1940-11-10     1940-11-16      date… The Han… https…
+#> 11 elections    9004  Date… 1945-10-18     1945-08-18      date… The Han… https…
+#> 12 elections    315   Date… 1963-06-01     1963-09-28      date… The Han… https…
+#> 13 elections    327   Date… 1963-09-28     1963-06-01      date… The Han… https…
 #> # ℹ 1 more variable: date_added <chr>
 ```
 
-Last updated: 26 October 2026. See `NEWS.md` for changes.
+Last updated: 16 November 2026. See `NEWS.md` for changes.
 
 ## Image Attribution
 

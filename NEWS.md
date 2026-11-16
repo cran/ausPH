@@ -1,3 +1,58 @@
+# ausPH 1.1.1
+
+* ausPH is on CRAN (1.0.1, published 12 November 2026); the README now
+  installs from CRAN, with the GitHub version for features not yet released.
+* The internal helper that records when a stored table was built, which
+  wrote into the package source, has moved from the package to
+  `data-raw/helpers.R`, as no package code may write to the user's
+  filespace (CRAN review of 1.0.1).
+
+# ausPH 1.1.0
+
+## New features
+
+* New `getPresidingOfficers()` returns the Speakers of the House, Presidents
+  of the Senate, their deputies, Chairs of Committees, temporary chairs,
+  members of the Speaker's panel and acting holders of these offices since
+  1901, with each person's `PHID` and the dates they held the office (#6).
+  It comes from the Handbook's records of parliamentary positions in one
+  request, with a stored copy for `update = FALSE` or when the Handbook
+  cannot be reached. `Chamber` is taken from the chamber the person sat in
+  when the term began, since "Chairman of Committees" and "Temporary Chairman
+  of Committees" were offices in both chambers. Rows with a problem in the
+  Handbook are flagged: one term with no start date, one ending before it
+  starts (Turley, 1909) and three starting when the person was not in
+  parliament (Cunningham, Eggins, Keane).
+
+## Citation
+
+* Each release is now archived on Zenodo with its own DOI, so work built on
+  ausPH can cite the exact version it used (#7). `CITATION.cff` holds the
+  citation metadata, and `citation("ausPH")` gives the reference in R.
+
+## Other changes
+
+* The data map in the README adds `getPresidingOfficers()`.
+
+# ausPH 1.0.2
+
+## Errata corrections
+
+* Removed two errata that were wrong. The Senate did sit on 14 March 1928 and
+  17 March 1997, as the Handbook says: Hansard exists for both days. In
+  1.0.0 and 1.0.1 these days were wrongly flagged `chamber_did_not_sit`, and
+  `apply_errata = TRUE` wrongly set `SenateSitting` to `FALSE`. If you used
+  `getSittingDates(apply_errata = TRUE)`, re-run it (#4).
+* Added an erratum for 13 December 1996: the Handbook lists a House sitting,
+  but this was the sitting of 12 December continuing, so one sitting was
+  counted twice. It is flagged with a new code,
+  `continuation_of_previous_sitting`. The Senate did sit that day (#5).
+* `getErrata()` now covers 13 errors.
+
+## Other changes
+
+* README: added a link to the Handbook API's documentation (#3).
+
 # ausPH 1.0.1
 
 ## Live updates
